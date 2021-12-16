@@ -1,0 +1,9 @@
+ import happybasconnection = happybase.Connection('127.0.0.1', 32872)
+>>> connection.create_table('table-name', { 'family': dict() } )
+>>> connection.tables()
+[b'table-name']
+>>> table = connection.table('table-name')
+>>> table.put('row-key', {'family:qual1': 'value1', 'family:qual2': 'value2'})
+>>> for k, data in table.scan():
+...   print(k, data)
+...

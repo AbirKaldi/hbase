@@ -29,8 +29,8 @@ docker inspect "$id" > config.json
 
 trap "rm -f config.json; exit 0" INT QUIT
 
-docker_hostname=$(python -c 'from __future__ import print_function; import json; c=json.load(open("config.json")); print(c[0]["Config"]["Hostname"])')
-docker_ip=$(python -c 'from __future__ import print_function; import json; c=json.load(open("config.json")); print(c[0]["NetworkSettings"]["IPAddress"])')
+docker_hostname=$(python3 -c 'from __future__ import print_function; import json; c=json.load(open("config.json")); print(c[0]["Config"]["Hostname"])')
+docker_ip=$(python3 -c 'from __future__ import print_function; import json; c=json.load(open("config.json")); print(c[0]["NetworkSettings"]["IPAddress"])')
 
 hosts_hbase_docker_ip=$(awk "{if(\$2 == \"${docker_hostname}\") { print \$1 }}" /etc/hosts)
 if [ "$hosts_hbase_docker_ip" == "$docker_ip" ]; then
@@ -59,7 +59,7 @@ echo "$program: Connect to HBase at localhost on these ports"
 for config_data in "${config[@]}"; do
   IFS=@ read -r label port type <<< "$config_data"
 
-  mapped_port=$(python -c "from __future__ import print_function; import json; c=json.load(open(\"config.json\")); print(c[0][\"NetworkSettings\"][\"Ports\"][\"${port}/tcp\"][0][\"HostPort\"])")
+  mapped_port=$(python3 -c "from __future__ import print_function; import json; c=json.load(open(\"config.json\")); print(c[0][\"NetworkSettings\"][\"Ports\"][\"${port}/tcp\"][0][\"HostPort\"])")
   key="127.0.0.1:$mapped_port"
   if [ "$type" == "web" ]; then
     key="http://${key}/"
